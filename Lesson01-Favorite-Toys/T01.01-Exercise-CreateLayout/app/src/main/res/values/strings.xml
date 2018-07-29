@@ -14,5 +14,6 @@
   limitations under the License.
   -->
 <resources>
-    <string name="app_name">Project Setup</string>
+    <!-- <string name="app_name">RGB Project Setup</string> -->
+    <string name="app_name">Project RAD 1</string>
 </resources>
