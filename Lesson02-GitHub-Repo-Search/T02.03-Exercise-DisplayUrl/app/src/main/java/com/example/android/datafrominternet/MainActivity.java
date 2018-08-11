@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +46,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeGithubSearchQuery() {
-        mUrlDisplayTextView.setText(NetworkUtils.buildUrl(mSearchBoxEditText.getText().toString()).toString());
+        String searchKeyword = mSearchBoxEditText.getText().toString();
+        String searchUrlStr = StringUtils.EMPTY;
+
+        if(StringUtils.isNotBlank(searchKeyword)) {
+            searchUrlStr = NetworkUtils.buildUrl(searchKeyword).toString();
+        }
+
+        mUrlDisplayTextView.setText(searchUrlStr);
     }
 
     @Override
