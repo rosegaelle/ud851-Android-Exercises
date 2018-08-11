@@ -15,11 +15,16 @@
  */
 package com.example.android.datafrominternet.utilities;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.StringJoiner;
+
 
 /**
  * These utilities will be used to communicate with the network.
@@ -44,9 +49,27 @@ public class NetworkUtils {
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(String githubSearchQuery) {
+    public static URL buildUrl(String githubSearchQuery) throws MalformedURLException {
         // TODO (1) Fill in this method to build the proper Github query URL
-        return null;
+
+
+        String githubSearchQueryUrl = GITHUB_BASE_URL;
+
+
+        if(StringUtils.isNotBlank(githubSearchQuery)) {
+            githubSearchQueryUrl = joinParams("?", GITHUB_BASE_URL,
+                                        joinParams("&",
+                                            joinParams("=", PARAM_QUERY, githubSearchQuery),
+                                            joinParams("=", PARAM_SORT, sortBy)));
+        }
+
+        return new URL(githubSearchQueryUrl);
+    }
+
+    private static String joinParams(String delimiter, String left, String right) {
+        StringJoiner joiner = new StringJoiner(delimiter);
+        joiner.add(left).add(right);
+        return joiner.toString();
     }
 
     /**
