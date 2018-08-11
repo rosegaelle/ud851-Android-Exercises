@@ -49,9 +49,7 @@ public class NetworkUtils {
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(String githubSearchQuery) throws MalformedURLException {
-        // TODO (1) Fill in this method to build the proper Github query URL
-
+    public static URL buildUrl(final String githubSearchQuery) throws MalformedURLException {
 
         String githubSearchQueryUrl = GITHUB_BASE_URL;
 

@@ -18,11 +18,18 @@ package com.example.android.datafrominternet;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.android.datafrominternet.utilities.NetworkUtils;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,8 +50,17 @@ public class MainActivity extends AppCompatActivity {
         mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
     }
 
-    // TODO (2) Create a method called makeGithubSearchQuery
-    // TODO (3) Within this method, build the URL with the text from the EditText and set the built URL to the TextView
+    private URL makeGithubSearchQuery() {
+        URL githubSearchQuery = null;
+        try {
+            githubSearchQuery = NetworkUtils.buildUrl(mSearchBoxEditText.getText().toString());
+            mUrlDisplayTextView.setText(githubSearchQuery.toString());
+        } catch(MalformedURLException e) {
+            Log.e(getClass().toString(), e.getMessage());
+        }
+
+        return githubSearchQuery;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
