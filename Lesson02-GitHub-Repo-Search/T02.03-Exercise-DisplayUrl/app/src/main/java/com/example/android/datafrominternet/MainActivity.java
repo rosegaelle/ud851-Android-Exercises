@@ -17,7 +17,6 @@ package com.example.android.datafrominternet;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -25,16 +24,13 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
-import java.net.MalformedURLException;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText mSearchBoxEditText;
 
-    private TextView mUrlDisplayTextView;
+    private TextView mUrlDisplayTextView, mSearchResultsTextView;
 
-    private TextView mSearchResultsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeGithubSearchQuery() {
-        try {
-            mUrlDisplayTextView.setText(NetworkUtils.buildUrl(mSearchBoxEditText.getText().toString()).toString());
-        } catch(MalformedURLException e) {
-            Log.e(getClass().toString(), e.getMessage());
-        }
+        mUrlDisplayTextView.setText(NetworkUtils.buildUrl(mSearchBoxEditText.getText().toString()).toString());
     }
 
     @Override

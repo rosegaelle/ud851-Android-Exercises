@@ -15,7 +15,8 @@
  */
 package com.example.android.datafrominternet.utilities;
 
-import org.apache.commons.lang3.StringUtils;
+import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
-import java.util.StringJoiner;
 
 
 /**
@@ -31,17 +31,17 @@ import java.util.StringJoiner;
  */
 public class NetworkUtils {
 
-    final static String GITHUB_BASE_URL =
+    private final static String GITHUB_BASE_URL =
             "https://api.github.com/search/repositories";
 
-    final static String PARAM_QUERY = "q";
+    private final static String PARAM_QUERY = "q";
 
     /*
      * The sort field. One of stars, forks, or updated.
      * Default: results are sorted by best match if no field is specified.
      */
-    final static String PARAM_SORT = "sort";
-    final static String sortBy = "stars";
+    private final static String PARAM_SORT = "sort";
+    private final static String sortBy = "stars";
 
     /**
      * Builds the URL used to query Github.
@@ -49,25 +49,21 @@ public class NetworkUtils {
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the weather server.
      */
-    public static URL buildUrl(final String githubSearchQuery) throws MalformedURLException {
+    public static URL buildUrl(String githubSearchQuery) {
+        Uri githubSearchQueryUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
+                .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
+                .appendQueryParameter(PARAM_SORT, sortBy)
+                .build();
 
-        String githubSearchQueryUrl = GITHUB_BASE_URL;
-
-
-        if(StringUtils.isNotBlank(githubSearchQuery)) {
-            githubSearchQueryUrl = joinParams("?", GITHUB_BASE_URL,
-                                        joinParams("&",
-                                            joinParams("=", PARAM_QUERY, githubSearchQuery),
-                                            joinParams("=", PARAM_SORT, sortBy)));
+        URL githubSearchQueryUrl = null;
+        try {
+            githubSearchQueryUrl = new URL(githubSearchQueryUri.toString());
+        } catch (MalformedURLException e) {
+            Log.e(NetworkUtils.class.toString(), "Error generating the GitHub search query URL + \n" + e.getMessage());
+            //? e.printStackTrace();
         }
 
-        return new URL(githubSearchQueryUrl);
-    }
-
-    private static String joinParams(String delimiter, String left, String right) {
-        StringJoiner joiner = new StringJoiner(delimiter);
-        joiner.add(left).add(right);
-        return joiner.toString();
+        return githubSearchQueryUrl;
     }
 
     /**
