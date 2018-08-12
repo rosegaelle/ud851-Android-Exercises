@@ -24,8 +24,8 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
-import java.io.IOException;
 import java.net.URL;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mUrlDisplayTextView;
 
-    private TextView mSearchResultsTextView;
+//+++    private TextView mSearchResultsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mSearchBoxEditText = (EditText) findViewById(R.id.et_search_box);
 
         mUrlDisplayTextView = (TextView) findViewById(R.id.tv_url_display);
-        mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
+//+++        mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
     }
 
     /**
@@ -56,14 +56,11 @@ public class MainActivity extends AppCompatActivity {
         String githubQuery = mSearchBoxEditText.getText().toString();
         URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
         mUrlDisplayTextView.setText(githubSearchUrl.toString());
-        String githubSearchResults = null;
-        try {
-            githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
-            mSearchResultsTextView.setText(githubSearchResults);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // TODO (4) Create a new GithubQueryTask and call its execute method, passing in the url to query
+
+        GithubQueryTask githubQueryTask = new GithubQueryTask();
+        githubQueryTask.execute(githubSearchUrl);
+
+//+++    mSearchResultsTextView.setText(githubSearchResults);
     }
 
     @Override

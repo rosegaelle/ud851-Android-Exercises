@@ -13,11 +13,9 @@ public class GithubQueryTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
 
-        URL githubSearchUrl = (URL) params[0];
-
         String githubSearchResults = null;
-
         try {
+            URL githubSearchUrl = (URL) params[0];
             githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,5 +29,3 @@ public class GithubQueryTask extends AsyncTask {
         // TODO (3) Override onPostExecute to display the results in the TextView
     }
 }
-
-
