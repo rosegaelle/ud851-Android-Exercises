@@ -39,6 +39,10 @@
     <!--TODO (2) Wrap the ScrollView in a FrameLayout-->
     <!--TODO (3) Make the width and height of the FrameLayout match_parent-->
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,6 +55,9 @@
             android:text="Make a search!"
             android:textSize="18sp" />
     </ScrollView>
+
+    </FrameLayout>
+
 
     <!--TODO (4) Add a TextView to display an error message-->
     <!--TODO (5) Set the text size to 22sp-->
