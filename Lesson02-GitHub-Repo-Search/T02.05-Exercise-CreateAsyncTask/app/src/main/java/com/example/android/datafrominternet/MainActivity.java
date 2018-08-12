@@ -15,6 +15,7 @@
  */
 package com.example.android.datafrominternet;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
+import java.io.IOException;
 import java.net.URL;
 
 
@@ -77,5 +79,27 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class GithubQueryTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL[] params) {
+
+            String githubSearchResults = null;
+            try {
+                URL githubSearchUrl = params[0];
+                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return githubSearchResults;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // TODO (3) Override onPostExecute to display the results in the TextView
+        }
     }
 }
