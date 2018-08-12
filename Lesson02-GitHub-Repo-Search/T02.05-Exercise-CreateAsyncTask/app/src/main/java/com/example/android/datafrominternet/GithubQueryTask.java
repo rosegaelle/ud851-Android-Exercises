@@ -11,9 +11,9 @@ import java.net.URL;
 public class GithubQueryTask extends AsyncTask {
 
     @Override
-    protected Object doInBackground(Object[] objects) {
+    protected Object doInBackground(Object[] params) {
 
-        URL githubSearchUrl = (URL) objects[0];
+        URL githubSearchUrl = (URL) params[0];
 
         String githubSearchResults = null;
 
@@ -25,4 +25,11 @@ public class GithubQueryTask extends AsyncTask {
 
         return githubSearchResults;
     }
+
+    @Override
+    protected void onPostExecute(Object result) {
+        // TODO (3) Override onPostExecute to display the results in the TextView
+    }
 }
+
+

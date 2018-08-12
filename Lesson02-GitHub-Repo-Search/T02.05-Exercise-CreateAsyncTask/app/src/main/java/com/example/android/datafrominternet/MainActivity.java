@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
         // TODO (4) Create a new GithubQueryTask and call its execute method, passing in the url to query
     }
 
-    // TODO (3) Override onPostExecute to display the results in the TextView
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
