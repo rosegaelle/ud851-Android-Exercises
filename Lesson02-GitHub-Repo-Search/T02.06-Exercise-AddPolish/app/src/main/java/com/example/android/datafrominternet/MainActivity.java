@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mUrlDisplayTextView, mSearchResultsTextView, mErrorTextView;
 
-    // TODO (24) Create a ProgressBar variable to store a reference to the ProgressBar
+    private ProgressBar mProgressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
         mUrlDisplayTextView = (TextView) findViewById(R.id.tv_url_display);
         mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
         mErrorTextView = (TextView) findViewById(R.id.tv_error_message_display);
-
-        // TODO (25) Get a reference to the ProgressBar using findViewById
+        mProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
     /**
@@ -60,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
      */
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
-        URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
-        mUrlDisplayTextView.setText(githubSearchUrl.toString());
-        new GithubQueryTask().execute(githubSearchUrl);
+
+        if(StringUtils.isNotBlank(githubQuery)){
+            URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+            mUrlDisplayTextView.setText(githubSearchUrl.toString());
+            new GithubQueryTask().execute(githubSearchUrl);
+        }
+    }
+
+    private void clearTextViews(){
+        mUrlDisplayTextView.setText(null);
+        mSearchResultsTextView.setText(null);
     }
 
     private void showJsonDataView() {
@@ -75,10 +84,12 @@ public class MainActivity extends AppCompatActivity {
         mErrorTextView.setVisibility(View.VISIBLE);
     }
 
-
     public class GithubQueryTask extends AsyncTask<URL, Void, String> {
 
-        // TODO (26) Override onPreExecute to set the loading indicator to visible
+        @Override
+        protected void onPreExecute() {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(URL... params) {
@@ -94,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String githubSearchResults) {
-            // TODO (27) As soon as the loading is complete, hide the loading indicator
+            mProgressBar.setVisibility(View.INVISIBLE);
             if (StringUtils.isNotBlank(githubSearchResults)) {
                 showJsonDataView();
                 mSearchResultsTextView.setText(githubSearchResults);
@@ -114,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_search) {
+            clearTextViews();
             makeGithubSearchQuery();
             return true;
         }
