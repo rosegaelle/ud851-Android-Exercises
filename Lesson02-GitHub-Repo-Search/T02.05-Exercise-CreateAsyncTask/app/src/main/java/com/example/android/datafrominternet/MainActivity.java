@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -33,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText mSearchBoxEditText;
 
-    private TextView mUrlDisplayTextView;
-
-//+++    private TextView mSearchResultsTextView;
+    private TextView mUrlDisplayTextView, mSearchResultsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSearchBoxEditText = (EditText) findViewById(R.id.et_search_box);
-
         mUrlDisplayTextView = (TextView) findViewById(R.id.tv_url_display);
-//+++        mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
+        mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
     }
 
     /**
@@ -56,13 +55,14 @@ public class MainActivity extends AppCompatActivity {
      */
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
-        URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
-        mUrlDisplayTextView.setText(githubSearchUrl.toString());
 
-        GithubQueryTask githubQueryTask = new GithubQueryTask();
-        githubQueryTask.execute(githubSearchUrl);
+        if(StringUtils.isNotBlank(githubQuery)) {
+            URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+            mUrlDisplayTextView.setText(githubSearchUrl.toString());
 
-//+++    mSearchResultsTextView.setText(githubSearchResults);
+            GithubQueryTask githubQueryTask = new GithubQueryTask();
+            githubQueryTask.execute(githubSearchUrl);
+        }
     }
 
     @Override
@@ -75,10 +75,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemThatWasClickedId = item.getItemId();
         if (itemThatWasClickedId == R.id.action_search) {
+            clearTextViews();
             makeGithubSearchQuery();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearTextViews(){
+        mUrlDisplayTextView.setText(null);
+        mSearchResultsTextView.setText(null);
     }
 
     public class GithubQueryTask extends AsyncTask<URL, Void, String> {
@@ -99,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // TODO (3) Override onPostExecute to display the results in the TextView
+            if(StringUtils.isNotBlank(result)) {
+                mSearchResultsTextView.setText(result);
+            }
         }
     }
 }
